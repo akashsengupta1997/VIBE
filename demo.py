@@ -15,7 +15,7 @@
 # Contact: ps-license@tuebingen.mpg.de
 
 import os
-os.environ['PYOPENGL_PLATFORM'] = 'egl'
+# os.environ['PYOPENGL_PLATFORM'] = 'osmesa'
 
 import cv2
 import time
@@ -101,6 +101,7 @@ def main(args):
     # ========= Define VIBE model ========= #
     model = VIBE_Demo(
         seqlen=16,
+        device=device,
         n_layers=2,
         hidden_size=1024,
         add_linear=True,
@@ -109,7 +110,7 @@ def main(args):
 
     # ========= Load pretrained weights ========= #
     pretrained_file = download_ckpt(use_3dpw=False)
-    ckpt = torch.load(pretrained_file)
+    ckpt = torch.load(pretrained_file, map_location=device)
     print(f'Performance of pretrained model on 3DPW: {ckpt["performance"]}')
     ckpt = ckpt['gen_state_dict']
     model.load_state_dict(ckpt, strict=False)
@@ -142,7 +143,7 @@ def main(args):
         frames = dataset.frames
         has_keypoints = True if joints2d is not None else False
 
-        dataloader = DataLoader(dataset, batch_size=args.vibe_batch_size, num_workers=16)
+        dataloader = DataLoader(dataset, batch_size=args.vibe_batch_size, num_workers=0)
 
         with torch.no_grad():
 

@@ -113,6 +113,7 @@ class VIBE(nn.Module):
     def __init__(
             self,
             seqlen,
+            device,
             batch_size=64,
             n_layers=1,
             hidden_size=2048,
@@ -156,7 +157,7 @@ class VIBE(nn.Module):
         self.regressor = Regressor(use_6d=use_6d)
 
         if pretrained and os.path.isfile(pretrained):
-            pretrained_dict = torch.load(pretrained)['model']
+            pretrained_dict = torch.load(pretrained, map_location=device)['model']
 
             if not use_6d:
                 del pretrained_dict['decpose.weight']
@@ -193,6 +194,7 @@ class VIBE_Demo(nn.Module):
     def __init__(
             self,
             seqlen,
+            device,
             batch_size=64,
             n_layers=1,
             hidden_size=2048,
@@ -233,14 +235,14 @@ class VIBE_Demo(nn.Module):
             )
 
         self.hmr = hmr()
-        checkpoint = torch.load(pretrained)
+        checkpoint = torch.load(pretrained, map_location=device)
         self.hmr.load_state_dict(checkpoint['model'], strict=False)
 
         # regressor can predict cam, pose and shape params in an iterative way
         self.regressor = Regressor(use_6d=use_6d)
 
         if pretrained and os.path.isfile(pretrained):
-            pretrained_dict = torch.load(pretrained)['model']
+            pretrained_dict = torch.load(pretrained, map_location=device)['model']
 
             if not use_6d:
                 del pretrained_dict['decpose.weight']

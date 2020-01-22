@@ -1,0 +1,19 @@
+# Predictions
+predictions*
+
+# Pycache
+*.pyc
+
+#PyCharm
+*.xml
+*.iml
+*idea
+
+# Mac
+*.DS_Store
+
+# data
+data/*
+
+# Media
+*.mp4
