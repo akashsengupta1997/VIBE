@@ -22,7 +22,7 @@ from torch.utils.data import Dataset
 from torchvision.transforms.functional import to_tensor
 
 from lib.utils.smooth_bbox import get_all_bbox_params
-from lib.data_utils.img_utils import get_single_image_crop_demo
+from lib.data_utils.img_utils import get_single_image_crop_demo, convert_cvimg_to_tensor
 
 
 class Inference(Dataset):
@@ -72,6 +72,30 @@ class Inference(Dataset):
             return norm_img, kp_2d
         else:
             return norm_img
+
+
+class InferenceFromCrops(Dataset):
+    """
+    Dataset class for inference from squared and centred crops (pre-computed and saved).
+    """
+    def __init__(self, image_folder, crop_size=224):
+        self.image_file_names = [
+            osp.join(image_folder, x)
+            for x in os.listdir(image_folder)
+            if x.endswith('.png') or x.endswith('.jpg')
+        ]
+        self.image_file_names = sorted(self.image_file_names)
+        self.crop_size = crop_size
+
+    def __len__(self):
+        return len(self.image_file_names)
+
+    def __getitem__(self, idx):
+        img = cv2.cvtColor(cv2.imread(self.image_file_names[idx]), cv2.COLOR_BGR2RGB)
+        img = cv2.resize(img, (self.crop_size, self.crop_size))
+        norm_img = convert_cvimg_to_tensor(img)
+
+        return norm_img
 
 
 class ImageFolder(Dataset):

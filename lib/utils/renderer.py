@@ -89,7 +89,11 @@ class Renderer():
             R = trimesh.transformations.rotation_matrix(math.radians(angle), axis)
             mesh.apply_transform(R)
 
-        sx, sy, tx, ty = cam
+        if cam.shape[-1] == 4:
+            sx, sy, tx, ty = cam
+        elif cam.shape[-1] == 3:
+            s, tx, ty = cam
+            sx = sy = s
 
         camera = WeakPerspectiveCamera(
             scale=[sx, sy],

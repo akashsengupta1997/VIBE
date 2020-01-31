@@ -206,7 +206,7 @@ def get_single_image_crop(image, bbox, scale=1.3):
 
     return crop_image
 
-def get_single_image_crop_demo(image, bbox, kp_2d, scale=1.2, crop_size=224):
+def get_single_image_crop_demo(image, bbox, kp_2d, scale=1.2, crop_size=512):
     if isinstance(image, str):
         if os.path.isfile(image):
             image = cv2.cvtColor(cv2.imread(image), cv2.COLOR_BGR2RGB)
@@ -230,6 +230,14 @@ def get_single_image_crop_demo(image, bbox, kp_2d, scale=1.2, crop_size=224):
         scale=scale,
         rot=0,
     )
+    # import matplotlib
+    # matplotlib.use('MacOSX')
+    # import matplotlib.pyplot as plt
+    # plt.imshow(image)
+    # plt.show()
+    # plt.imshow(crop_image)
+    # plt.show()
+
 
     if kp_2d is not None:
         for n_jt in range(kp_2d.shape[0]):
