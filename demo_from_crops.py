@@ -249,7 +249,9 @@ def main(args):
                                              axis=1)
                     whole_img = np.concatenate([top_row, bot_row], axis=0)
 
-            cv2.imwrite(os.path.join(output_img_folder, f'{frame_idx:06d}.png'), whole_img)
+            # cv2.imwrite(os.path.join(output_img_folder, f'{frame_idx:06d}.png'), whole_img)
+            cv2.imwrite(os.path.join(output_img_folder, os.path.basename(img_fname)),
+                        whole_img)
 
         # ========= Save rendered video ========= #
         save_vid_path = os.path.join(output_path, 'vibe_video.mp4')
